@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: UniBuddy hackathon backend - Lambda, API Gateway, DynamoDB and Bedrock
+
+Parameters:
+  ModelId:
+    Type: String
+    Default: global.amazon.nova-2-lite-v1:0
+    Description: Amazon Bedrock model or inference profile ID
+
+Resources:
+  UniBuddyTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: UniBuddyData
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+
+  UniBuddyApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: $default
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - content-type
+        AllowMethods:
+          - GET
+          - PUT
+          - POST
+          - OPTIONS
+
+  UniBuddyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UniBuddyBackend
+      CodeUri: lambda/
+      Handler: index.handler
+      Runtime: nodejs24.x
+      Architectures:
+        - arm64
+      Timeout: 30
+      MemorySize: 512
+      Environment:
+        Variables:
+          UNIBUDDY_TABLE_NAME: !Ref UniBuddyTable
+          BEDROCK_MODEL_ID: !Ref ModelId
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+              Resource: !GetAtt UniBuddyTable.Arn
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:GetInferenceProfile
+              Resource: '*'
+      Events:
+        Proxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref UniBuddyApi
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiUrl:
+    Description: UniBuddy API Gateway URL
+    Value: !Sub 'https://${UniBuddyApi}.execute-api.${AWS::Region}.amazonaws.com'
+  TableName:
+    Description: UniBuddy DynamoDB table
+    Value: !Ref UniBuddyTable
+  LambdaName:
+    Description: UniBuddy Lambda function
+    Value: !Ref UniBuddyFunction

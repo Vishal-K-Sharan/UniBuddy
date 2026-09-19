@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "UniBuddy"
+description = "A personal command center for students to manage their budget, resources, AI guidance, study groups, and progress in one place."
+version = "1.0.0"
+id = "artifacts/consigliere"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20174
+
+[services.development]
+run = "pnpm --filter @workspace/consigliere run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/consigliere", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/consigliere/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20174"
+BASE_PATH = "/"

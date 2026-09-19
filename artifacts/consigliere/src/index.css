@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 244 23% 6%;
+  --foreground: 255 23% 96%;
+  --border: 264 23% 21%;
+  --input: 264 23% 25%;
+  --ring: 271 91% 70%;
+  --card: 250 22% 10%;
+  --card-foreground: 255 23% 96%;
+  --card-border: 264 23% 21%;
+  --popover: 250 22% 10%;
+  --popover-foreground: 255 23% 96%;
+  --popover-border: 264 23% 21%;
+  --primary: 270 78% 63%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 264 31% 18%;
+  --secondary-foreground: 255 23% 96%;
+  --muted: 258 23% 14%;
+  --muted-foreground: 253 13% 68%;
+  --accent: 293 78% 72%;
+  --accent-foreground: 250 22% 9%;
+  --destructive: 0 73% 62%;
+  --destructive-foreground: 0 0% 100%;
+  --app-font-sans: 'Manrope', sans-serif;
+  --app-font-serif: 'Fraunces', serif;
+  --app-font-mono: 'DM Mono', monospace;
+  --radius: 1rem;
+  --shadow-card: 0 18px 50px rgba(0, 0, 0, .28), 0 0 35px hsl(270 78% 63% / .06);
+  --shadow-float: 0 28px 80px rgba(0, 0, 0, .42), 0 0 55px hsl(270 78% 63% / .1);
+}
+
+* { box-sizing: border-box; }
+html {
+  background:
+    radial-gradient(circle at 86% 0%, hsl(278 79% 21% / .42), transparent 34rem),
+    linear-gradient(135deg, hsl(244 23% 6%), hsl(255 25% 8%) 55%, hsl(274 27% 11%));
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: var(--app-font-sans);
+  background:
+    radial-gradient(circle at 86% 0%, hsl(278 79% 21% / .42), transparent 34rem),
+    linear-gradient(135deg, hsl(244 23% 6%), hsl(255 25% 8%) 55%, hsl(274 27% 11%));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes soft-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-rise-in { animation: rise-in .5s cubic-bezier(.22,1,.36,1) both; }
+.animate-soft-in { animation: soft-in .45s ease both; }
+.delay-1 { animation-delay: 80ms; }
+.delay-2 { animation-delay: 160ms; }
+.delay-3 { animation-delay: 240ms; }
+.delay-4 { animation-delay: 320ms; }
+
+.serif { font-family: var(--app-font-serif); }
+.mono { font-family: var(--app-font-mono); }
+.paper-texture {
+  position: relative;
+  isolation: isolate;
+}
+.paper-texture::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .08;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+}
+.card-lift { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.card-lift:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); border-color: hsl(var(--primary) / .24); }
+.focus-ring:focus-visible { outline: 3px solid hsl(var(--accent) / .65); outline-offset: 3px; }
+.field {
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: .8rem;
+  background: hsl(var(--card) / .72);
+  padding: .75rem .9rem;
+  color: hsl(var(--foreground));
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+.field:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 4px hsl(var(--primary) / .10); background: hsl(var(--card)); }
+.field::placeholder { color: hsl(var(--muted-foreground) / .72); }
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  border: 1px solid hsl(var(--primary));
+  border-radius: .75rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: .7rem 1rem;
+  font-weight: 700;
+  box-shadow: 0 8px 18px hsl(var(--primary) / .16);
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+.btn-primary:hover { transform: translateY(-1px); background: hsl(270 78% 56%); box-shadow: 0 12px 22px hsl(var(--primary) / .3); }
+.btn-quiet {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  border: 1px solid hsl(var(--border)); border-radius: .75rem;
+  background: hsl(var(--card) / .52); color: hsl(var(--foreground));
+  padding: .7rem 1rem; font-weight: 700; transition: all .2s ease;
+}
+.btn-quiet:hover { border-color: hsl(var(--primary) / .4); background: hsl(var(--secondary) / .5); }
+.btn-danger { color: hsl(var(--destructive)); border-color: hsl(var(--destructive) / .22); }
+.btn-danger:hover { background: hsl(var(--destructive) / .08); border-color: hsl(var(--destructive) / .4); }
+.eyebrow { color: hsl(var(--primary)); font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
