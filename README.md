@@ -1,61 +1,182 @@
 # UniBuddy
 
-UniBuddy is an all-in-one student productivity workspace combining budgeting, study resources, progress tracking, study groups, and an AI study/life assistant in one calm interface.
+> **One workspace for the messy reality of student life.**
 
-## AWS architecture
+UniBuddy is an AI-powered student workspace that brings together budgeting, study resources, progress tracking, study groups, and an AI student assistant in one place.
+
+### 🚀 Live Demo
+
+**[Open UniBuddy](YOUR_AMPLIFY_URL)**
+
+### 🎯 The Problem
+
+Students often manage different parts of college life across disconnected apps:
+
+* expenses in one place
+* study resources somewhere else
+* progress tracked manually
+* group coordination through messaging apps
+* general questions handled through separate AI tools
+
+UniBuddy combines these everyday workflows into a single student-focused workspace.
+
+### ✨ Features
+
+| Feature         | What it does                        |
+| --------------- | ----------------------------------- |
+| 💰 Budget       | Track student expenses and spending |
+| 📚 Resources    | Save useful study links and notes   |
+| 🤖 Ask UniBuddy | Get AI-powered student guidance     |
+| 📈 Progress     | Track study time and accuracy       |
+| 👥 Study Groups | Discover and join study groups      |
+| 🔄 Cloud Sync   | Persist workspace data through AWS  |
+
+### 🧠 AI Assistant
+
+Ask UniBuddy can use lightweight workspace context such as:
+
+* recent expenses
+* total spending
+* saved resources
+* study minutes
+
+The frontend sends the request to the backend, where AWS Lambda invokes Amazon Bedrock using the Converse API.
+
+### ☁️ AWS Architecture
 
 ```mermaid
-graph TD
-    A[Student Browser] --> B[Amplify Hosting]
-    B --> C[UniBuddy React/Vite App]
-    C --> D[API Gateway HTTP API]
+flowchart LR
+    A[Student Browser] --> B[AWS Amplify Hosting]
+    B --> C[React + Vite]
+    C --> D[API Gateway]
     D --> E[AWS Lambda]
+
     E --> F[(Amazon DynamoDB)]
     E --> G[Amazon Bedrock]
     G --> H[Amazon Nova 2 Lite]
 ```
 
-- **Amplify Hosting** serves the React/Vite frontend with Git-based CI/CD.
-- **API Gateway + Lambda** provide the backend API.
-- **DynamoDB** stores the student's synced workspace state.
-- **Amazon Bedrock** powers Ask UniBuddy using Amazon Nova 2 Lite.
-- The browser keeps a local copy so the demo remains usable during a temporary network interruption.
+### 🔧 AWS Services
 
-## Main flows
+| AWS Service         | Role in UniBuddy                                          |
+| ------------------- | --------------------------------------------------------- |
+| AWS Amplify Hosting | Hosts the React frontend and handles Git-based deployment |
+| API Gateway         | Exposes HTTP API endpoints                                |
+| AWS Lambda          | Runs backend logic                                        |
+| DynamoDB            | Stores synced workspace state                             |
+| Amazon Bedrock      | Provides the AI inference layer                           |
+| Amazon Nova 2 Lite  | Powers Ask UniBuddy                                       |
 
-### Budget
-Add expenses in the Budget screen. Workspace updates are sent to the AWS API and persisted in DynamoDB.
+### 🔄 Example Request Flow
 
-### Resource Hub
-Save study links and notes in the Resources screen. These resources are included in the synced workspace state.
+```text
+Student asks:
+"I spent too much this week. Help me make a budget."
 
-### Ask UniBuddy
-The assistant sends the student's question plus lightweight app context to the backend. Lambda invokes Amazon Bedrock and returns the response.
+        ↓
 
-### Progress and study groups
-Progress records and joined groups are part of the same synced workspace model.
+React frontend
 
-## Local development
+        ↓
 
-This repo is a pnpm workspace. Install dependencies and run the frontend from the repository root:
+API Gateway
+
+        ↓
+
+AWS Lambda
+
+        ↓
+
+Amazon Bedrock
+(Nova 2 Lite)
+
+        ↓
+
+AI response
+
+        ↓
+
+UniBuddy interface
+```
+
+### 🗂️ Project Structure
+
+```text
+UniBuddy/
+├── artifacts/
+│   └── consigliere/          # React/Vite frontend
+├── aws/
+│   ├── lambda/
+│   │   └── index.mjs         # AWS Lambda backend
+│   └── lambda-policy.json     # IAM permissions
+├── lib/                       # Shared API/client libraries
+├── scripts/                   # Development/build scripts
+├── AWS_DEPLOYMENT.md          # AWS deployment guide
+├── amplify.yml                # Amplify build configuration
+├── package.json
+├── pnpm-workspace.yaml
+└── README.md
+```
+
+### 💻 Local Development
+
+Requirements:
+
+* Node.js 24+
+* pnpm 10+
+
+Install dependencies:
 
 ```bash
 pnpm install
+```
+
+Run the frontend:
+
+```bash
 pnpm --filter @workspace/consigliere run dev
 ```
 
-For a deployed backend, set the Vite environment variable below in the frontend build environment:
+For a deployed AWS backend:
 
-```text
+```env
 VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.ap-south-1.amazonaws.com
 ```
 
-Do not put AWS credentials in frontend code or commit them to the repository.
+### 🚀 AWS Deployment
 
-## AWS deployment
+See [`AWS_DEPLOYMENT.md`](./AWS_DEPLOYMENT.md) for the complete deployment process covering:
 
-See [`AWS_DEPLOYMENT.md`](./AWS_DEPLOYMENT.md) for the console steps for DynamoDB, Lambda, API Gateway, Bedrock permissions, and Amplify Hosting.
+* DynamoDB
+* Lambda
+* IAM
+* API Gateway
+* Amazon Bedrock
+* Amplify Hosting
 
-## Demo note
+### 🔐 Security Note
 
-The current authentication is intentionally lightweight for the hackathon prototype. A real production release should use Amazon Cognito instead of storing a password in browser localStorage.
+UniBuddy is currently a hackathon prototype.
+
+The current account flow is intentionally lightweight and should not be treated as production-grade authentication. A production release should use Amazon Cognito with authenticated API access.
+
+AWS credentials and secrets should never be committed to the repository.
+
+### 🛣️ Future Improvements
+
+* Amazon Cognito authentication
+* More granular API authorization
+* richer student analytics
+* smarter study planning
+* expanded collaboration features
+* production-grade observability
+
+### 👨‍💻 Built With
+
+**React · TypeScript · Vite · Tailwind CSS · AWS Amplify · API Gateway · Lambda · DynamoDB · Amazon Bedrock · Amazon Nova 2 Lite**
+
+---
+
+### 📄 License
+
+MIT
