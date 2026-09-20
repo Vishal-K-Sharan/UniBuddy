@@ -6,7 +6,7 @@ UniBuddy is an AI-powered student workspace that brings together budgeting, stud
 
 ### 🚀 Live Demo
 
-**[Open UniBuddy](YOUR_AMPLIFY_URL)**
+**[Open UniBuddy](https://main.d34pitc5fh7b7e.amplifyapp.com/)**
 
 ### 🎯 The Problem
 
